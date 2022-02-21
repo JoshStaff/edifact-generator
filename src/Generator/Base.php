@@ -38,20 +38,31 @@ class Base
      *
      * @param array $keys
      *
-     * @return array
      * @throws EdifactException
+     * @return array
      */
     public function composeByKeys($keys = null)
     {
         if ($keys === null) {
             $keys = $this->composeKeys;
         }
+
         foreach ($keys as $key) {
             if (property_exists($this, $key)) {
                 if ($this->{$key} !== null) {
                     $value = $this->{$key};
                     if ($value) {
-                        $this->messageContent[] = $value;
+                        /**
+                         * Flaky and hacky but might work for IMD values?
+                         */
+                        if (count($value) === 1) {
+                            foreach ($value as $subValue) {
+                                $this->messageContent[] = $subValue;
+                            }
+                        } else {
+                            $this->messageContent[] = $value;
+                        }
+
                     } else {
                         throw new EdifactException("key " . $key . " returns no array structure");
                     }
@@ -137,25 +148,43 @@ class Base
         ];
     }
 
+    protected function addGIRSegment($index, $code, $locationCode, $stockCategory)
+    {
+        return [
+            'GIR',
+            [
+                $index,
+                $code,
+                $locationCode,
+                $stockCategory,
+            ],
+        ];
+    }
+
     /**
      * @param     $dateString
      * @param     $type
      * @param int $formatQualifier
      *
-     * @see http://www.unece.org/trade/untdid/d96a/trsd/trsddtm.htm
-     * @return array
      * @throws EdifactException
+     * @return array
+     * @see http://www.unece.org/trade/untdid/d96a/trsd/trsddtm.htm
      */
     protected function addDTMSegment($dateString, $type, $formatQualifier = EdifactDate::DATE)
     {
         $data = [];
-        $data[] = (string)$type;
-        if (!empty($dateString)) {
+        $data[] = (string) $type;
+        if (! empty($dateString)) {
             $data[] = EdifactDate::get($dateString, $formatQualifier);
-            $data[] = (string)$formatQualifier;
+            $data[] = (string) $formatQualifier;
         }
 
-        return ['DTM', $data];
+
+        $res = ['DTM', $data];
+
+        dump($res);
+
+        return $res;
     }
 
     /**
@@ -209,7 +238,7 @@ class Base
                 ' [' . implode(', ', $array) . '] in ' . get_class($this) . '->' .
                 debug_backtrace()[1]['function'];
         }
-        if (!in_array($value, $array, true)) {
+        if (! in_array($value, $array, true)) {
             throw new EdifactException($errorMessage);
         }
     }
@@ -227,7 +256,7 @@ class Base
             'MOA',
             [
                 '',
-                (string)$qualifier,
+                (string) $qualifier,
                 EdiFactNumber::convert($value),
             ],
         ];

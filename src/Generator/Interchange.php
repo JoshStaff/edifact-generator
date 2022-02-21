@@ -87,6 +87,7 @@ class Interchange
     {
         $temp = [];
         $temp[] = ['UNB', $this->charset, $this->sender, $this->receiver, [$this->date, $this->time], $this->interchangeCode];
+        
         foreach ($this->messages as $msg) {
             foreach ($msg->getComposed() as $i) {
                 $temp[] = $i;

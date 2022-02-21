@@ -387,15 +387,11 @@ class Coparn extends Message
         }
 
         $this->messageContent[] = $this->booking;
-        if ($this->vessel !== null) {
-            $this->messageContent[] = $this->vessel;
-            $this->messageContent[] = $this->callsign;
-        }
+        $this->messageContent[] = $this->vessel;
+        $this->messageContent[] = $this->callsign;
         $this->messageContent[] = $this->pol;
-        if ($this->eta !== null) {
-            $this->messageContent[] = $this->eta;
-            $this->messageContent[] = $this->etd;
-        }
+        $this->messageContent[] = $this->eta;
+        $this->messageContent[] = $this->etd;
         $this->messageContent[] = $this->messageSender;
         $this->messageContent[] = $this->messageCF;
         $this->messageContent[] = $this->cntr;
@@ -413,13 +409,9 @@ class Coparn extends Message
             $this->messageContent[] = $this->weightTime;
         }
 
-        if ($this->fnd !== null) {
-            $this->messageContent[] = $this->fnd;
-        }
+        $this->messageContent[] = $this->fnd;
         $this->messageContent[] = $this->pol;
-        if ($this->pod !== null) {
-            $this->messageContent[] = $this->pod;
-        }
+        $this->messageContent[] = $this->pod;
         $this->messageContent[] = $this->weight;
 
         if ($this->ventilation !== null) {

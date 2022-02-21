@@ -56,10 +56,6 @@ class Coprar extends Message
     {
         $this->messageDate = self::dtmSegment(137, $dtm);
 
-        if ($dtm === null) {
-            $this->messageDate = null;
-        }
-
         return $this;
     }
 
@@ -172,9 +168,7 @@ class Coprar extends Message
             self::rffSegment('XXX', 1),
         ];
 
-        if ($this->messageDate !== null) {
-            $this->messageContent[] = $this->messageDate;
-        }
+        $this->messageContent[] = $this->messageDate;
         $this->messageContent[] = $this->vessel;
         $this->messageContent[] = $this->port;
         $this->messageContent[] = $this->eta;

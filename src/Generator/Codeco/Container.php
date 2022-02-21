@@ -140,9 +140,6 @@ class Container
             $composed[] = $this->bkg;
         }
         $composed[] = $this->effectiveDate;
-        if ($this->destination !== null) {
-            $composed[] = $this->destination;
-        }
         if ($this->weight !== null) {
             $composed[] = $this->weight;
         }

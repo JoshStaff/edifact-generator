@@ -156,12 +156,15 @@ class Orders extends Message
     {
         $this->composeByKeys();
 
+        dump($this->messageContent);
         foreach ($this->items as $item) {
             $composed = $item->compose();
             foreach ($composed as $entry) {
                 $this->messageContent[] = $entry;
             }
         }
+
+        dump($this->messageContent);
 
         // Segment Group 11 : Separator & Control Total
         $this->messageContent[] = ['UNS', 'S'];

@@ -51,18 +51,22 @@ trait Item
     protected $featuresText;
 
     /** @var array */
-    protected $composeKeys
-        = [
-            'position',
-            'additionalProductId',
-            'quantity',
-            'deliveryNoteDate',
-            'orderNumberWholesaler',
-            'orderDate',
-            'orderPosition',
-            'deliveryNoteNumber',
-            'deliveryNotePosition',
-        ];
+    protected $composeKeys = [
+        'position',
+        'imdInformation',
+        'additionalProductId',
+        'quantity',
+        'gir',
+        'deliveryNoteDate',
+        'orderNumberWholesaler',
+        'orderDate',
+        'orderPosition',
+        'deliveryNoteNumber',
+        'deliveryNotePosition',
+        'qli',
+    ];
+
+    protected $imdInformation;
 
     /**
      * @return array
@@ -123,8 +127,8 @@ trait Item
             $qualifier,
             [
                 $identifier,
-                $code
-            ]
+                $code,
+            ],
         ];
 
         return $this;
@@ -174,8 +178,8 @@ trait Item
         $this->quantity = [
             'QTY',
             [
-                (string)$qualifier,
-                (string)$quantity,
+                (string) $qualifier,
+                (string) $quantity,
                 $unit,
             ],
         ];
@@ -183,6 +187,46 @@ trait Item
         return $this;
     }
 
+
+//IMD+L+050+:::Chicago blues reunion
+//IMD+L+120+:::Liberation Hall
+//IMD+L+170+:::2022
+//IMD+L+220+:::Oth
+//IMD+L+230+:::781.643
+//IMD+L+250+:::DV
+
+    public function addInformation(
+        string $code,
+        string $information,
+    )
+    {
+        $property = $this->additionalText[] = [
+
+        ];
+
+        $content = [
+            'IMD',
+            [
+                'L',
+                $code,
+                '',
+                '',
+                $information,
+            ],
+        ];
+
+        $key = rand(0, 100000);
+        while (property_exists($this, $key)) {
+            $key = rand(0, 100000);
+        }
+
+
+        $this->{$key} = $content;
+        $this->addKeyToCompose($key);
+
+
+        return $this;
+    }
 
     /**
      * @param        $description
@@ -206,7 +250,7 @@ trait Item
                 '',
                 $organisation,
                 substr($description, 0, 35),
-                $temp
+                $temp,
             ],
         ];
     }
@@ -294,6 +338,8 @@ trait Item
     private function splitTexts($varName, $text, $maxLength, $lineLength, $type = 'ZU')
     {
         $this->{$varName} = str_split(mb_substr($text, 0, $maxLength), $lineLength);
+
+
         $nr = 0;
         foreach ($this->{$varName} as $line) {
             $property = $varName . $nr++;
@@ -361,6 +407,34 @@ trait Item
     public function setOrderPosition($orderPosition)
     {
         $this->orderPosition = $this->addRFFSegment('LI', $orderPosition);
+
+        return $this;
+    }
+
+    public function setQli($orderPosition)
+    {
+        $this->qli = $this->addRFFSegment('QLI', $orderPosition);
+
+        $this->addKeyToCompose('qli');
+        return $this;
+    }
+
+    public function setGir(
+        int $index,
+        string $code,
+        string $locationCode,
+        string $stockCategory,
+    )
+    {
+        $this->gir = $this->addGirSegment(
+            $index,
+            $code,
+            $locationCode,
+            '',
+            ''
+        );
+
+        dump($this->gir);
 
         return $this;
     }

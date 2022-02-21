@@ -7,6 +7,7 @@ use EDI\Generator\EdiFactNumber;
 /**
  * Trait ItemPrice
  * @url http://www.unece.org/trade/untdid/d96b/uncl/uncl5125.htm
+ *
  * @package EDI\Generator\Traits
  */
 trait ItemPrice
@@ -16,6 +17,8 @@ trait ItemPrice
 
     /** @var array */
     protected $netPrice;
+
+    protected $ourPrice;
 
     /**
      * @param $qualifier
@@ -32,12 +35,8 @@ trait ItemPrice
             'PRI',
             [
                 $qualifier,
-                EdiFactNumber::convert($value, $decimals, $format),
-                '',
-                '',
-                (string)$priceBase,
-                $priceBaseUnit
-            ]
+                EdiFactNumber::convert($value, $decimals, EdiFactNumber::DECIMAL_POINT),
+            ],
         ];
     }
 
@@ -81,6 +80,14 @@ trait ItemPrice
     {
         $this->netPrice = self::addPRISegment('AAA', $netPrice, 1, 'PCE', $decimals, $format);
         $this->addKeyToCompose('netPrice');
+
+        return $this;
+    }
+
+    public function setOurPrice($netPrice, $format = EdiFactNumber::DECIMAL_COMMA, $decimals = 2)
+    {
+        $this->ourPrice = self::addPRISegment('AAE', $netPrice);
+        $this->addKeyToCompose('ourPrice');
 
         return $this;
     }
