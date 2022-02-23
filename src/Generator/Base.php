@@ -148,19 +148,6 @@ class Base
         ];
     }
 
-    protected function addGIRSegment($index, $code, $locationCode, $stockCategory)
-    {
-        return [
-            'GIR',
-            [
-                $index,
-                $code,
-                $locationCode,
-                $stockCategory,
-            ],
-        ];
-    }
-
     /**
      * @param     $dateString
      * @param     $type
@@ -181,8 +168,6 @@ class Base
 
 
         $res = ['DTM', $data];
-
-        dump($res);
 
         return $res;
     }

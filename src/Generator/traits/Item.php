@@ -56,7 +56,6 @@ trait Item
         'imdInformation',
         'additionalProductId',
         'quantity',
-        'gir',
         'deliveryNoteDate',
         'orderNumberWholesaler',
         'orderDate',
@@ -216,14 +215,51 @@ trait Item
         ];
 
         $key = rand(0, 100000);
+        
         while (property_exists($this, $key)) {
             $key = rand(0, 100000);
         }
 
-
         $this->{$key} = $content;
         $this->addKeyToCompose($key);
 
+        return $this;
+    }
+
+    public function addGir(
+        int $index,
+        string $code,
+        string $locationCode,
+        string $stockCategory,
+    )
+    {
+        $gir = [
+            'GIR',
+            $index,
+            [
+                $code,
+                $locationCode,
+                $stockCategory,
+                'LSQ',
+            ],
+            [
+                'STOCK_AV',
+                'LFN',
+            ],
+            [
+                '10.21',
+                'LCV',
+            ],
+        ];
+
+        $key = rand(0, 100000);
+
+        while (property_exists($this, $key)) {
+            $key = rand(0, 100000);
+        }
+
+        $this->{$key} = $gir;
+        $this->addKeyToCompose($key);
 
         return $this;
     }
@@ -416,26 +452,6 @@ trait Item
         $this->qli = $this->addRFFSegment('QLI', $orderPosition);
 
         $this->addKeyToCompose('qli');
-        return $this;
-    }
-
-    public function setGir(
-        int $index,
-        string $code,
-        string $locationCode,
-        string $stockCategory,
-    )
-    {
-        $this->gir = $this->addGirSegment(
-            $index,
-            $code,
-            $locationCode,
-            '',
-            ''
-        );
-
-        dump($this->gir);
-
         return $this;
     }
 

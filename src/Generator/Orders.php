@@ -11,6 +11,7 @@ use EDI\Generator\traits\VatAndCurrency;
 /**
  * Class Orders
  * @url http://www.unece.org/trade/untdid/d96b/trmd/orders_s.htm
+ *
  * @package EDI\Generator
  */
 class Orders extends Message
@@ -114,6 +115,7 @@ class Orders extends Message
 
     /**
      * Orders constructor.
+     *
      * @param null $messageId
      * @param string $identifier
      * @param string $version
@@ -149,14 +151,13 @@ class Orders extends Message
     }
 
     /**
-     * @return $this
      * @throws EdifactException
+     * @return $this
      */
     public function compose()
     {
         $this->composeByKeys();
 
-        dump($this->messageContent);
         foreach ($this->items as $item) {
             $composed = $item->compose();
             foreach ($composed as $entry) {
@@ -164,11 +165,9 @@ class Orders extends Message
             }
         }
 
-        dump($this->messageContent);
-
         // Segment Group 11 : Separator & Control Total
         $this->messageContent[] = ['UNS', 'S'];
-        $this->messageContent[] = ['CNT', ['2', (string)count($this->items)]];
+        $this->messageContent[] = ['CNT', ['2', (string) count($this->items)]];
 
         parent::compose();
         return $this;
@@ -185,8 +184,8 @@ class Orders extends Message
     /**
      * @param string $orderNumber
      * @param string $documentType
-     * @return Orders
      * @throws EdifactException
+     * @return Orders
      */
     public function setOrderNumber($orderNumber, $documentType = '220')
     {
@@ -214,7 +213,7 @@ class Orders extends Message
             'YK8',
             '22B',
             '22E',
-            '23E'
+            '23E',
         ]);
         $this->orderNumber = ['BGM', $documentType, $orderNumber, '9'];
         return $this;
@@ -222,13 +221,27 @@ class Orders extends Message
 
     /**
      * Order number without documentType validation
+     *
      * @param $orderNumber
      * @param string $documentType
      * @return $this
      */
     public function setCustomOrderNumber($orderNumber, $documentType = '220')
     {
-        $this->orderNumber = ['BGM', $documentType, $orderNumber, '9'];
+        $this->orderNumber = [
+            'BGM',
+            [
+                $documentType,
+                '',
+                28,
+            ],
+            [
+                $orderNumber,
+            ],
+            [
+                '9',
+            ],
+        ];
         return $this;
     }
 
@@ -242,8 +255,8 @@ class Orders extends Message
 
     /**
      * @param array $orderDate
-     * @return Orders
      * @throws EdifactException
+     * @return Orders
      */
     public function setOrderDate($orderDate)
     {
@@ -300,8 +313,8 @@ class Orders extends Message
     /**
      * @param string|\DateTime $documentDate
      * @param int $formatQuantifier
-     * @return $this
      * @throws \EDI\Generator\EdifactException
+     * @return $this
      */
     public function setDocumentDate($documentDate, $formatQuantifier = EdifactDate::DATETIME)
     {
@@ -320,8 +333,8 @@ class Orders extends Message
     /**
      * @param string|\DateTime $deliveryDate
      * @param int $formatQuantifier
-     * @return $this
      * @throws \EDI\Generator\EdifactException
+     * @return $this
      */
     public function setDeliveryDate($deliveryDate, $formatQuantifier = EdifactDate::DATETIME)
     {
@@ -340,8 +353,8 @@ class Orders extends Message
     /**
      * @param $deliveryDate
      * @param int $formatQuantifier
-     * @return $this
      * @throws \EDI\Generator\EdifactException
+     * @return $this
      */
     public function setDeliveryDateLatest($deliveryDate, $formatQuantifier = EdifactDate::DATETIME)
     {
@@ -360,8 +373,8 @@ class Orders extends Message
     /**
      * @param string|\DateTime $deliveryDateEarliest
      * @param int $formatQuantifier
-     * @return $this
      * @throws \EDI\Generator\EdifactException
+     * @return $this
      */
     public function setDeliveryDateEarliest($deliveryDateEarliest, $formatQuantifier = EdifactDate::DATETIME)
     {
@@ -371,8 +384,8 @@ class Orders extends Message
 
     /**
      * @param $accountNumber
-     * @return Orders
      * @throws \EDI\Generator\EdifactException
+     * @return Orders
      */
     public function setAccountNumber($accountNumber)
     {
@@ -398,6 +411,7 @@ class Orders extends Message
 
     /**
      * set a reference for qualifier ACD
+     *
      * @param string $collectiveOrderNumber
      * @return Orders
      */
@@ -417,6 +431,7 @@ class Orders extends Message
 
     /**
      * set a reference for qualifier AAS
+     *
      * @param string $internalIdentifier
      * @return Orders
      */
@@ -436,6 +451,7 @@ class Orders extends Message
 
     /**
      * set a reference for qualifier AEP
+     *
      * @param string $objectNumber
      * @return Orders
      */
@@ -455,6 +471,7 @@ class Orders extends Message
 
     /**
      * set a reference for qualifier AFO
+     *
      * @param string $objectDescription1
      * @return Orders
      */
@@ -474,6 +491,7 @@ class Orders extends Message
 
     /**
      * set a reference for qualifier AFP
+     *
      * @param string $objectDescription2
      * @return Orders
      */
@@ -529,8 +547,8 @@ class Orders extends Message
 
     /**
      * @param string $deliveryTerms
-     * @return Orders
      * @throws EdifactException
+     * @return Orders
      */
     public function setDeliveryTerms($deliveryTerms)
     {

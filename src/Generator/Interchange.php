@@ -14,6 +14,7 @@ class Interchange
     private $date;
     private $time;
     private $charset;
+    private $quote = 'QUOTES';
 
     private $messages;
     private $composed;
@@ -86,7 +87,23 @@ class Interchange
     public function compose()
     {
         $temp = [];
-        $temp[] = ['UNB', $this->charset, $this->sender, $this->receiver, [$this->date, $this->time], $this->interchangeCode];
+        $temp[] = [
+            'UNB',
+            $this->charset,
+            $this->sender,
+            $this->receiver,
+            [$this->date, $this->time],
+            $this->interchangeCode,
+            $this->quote,
+            [
+            ],
+            [
+            ],
+            [
+            ],
+            [
+            ],
+        ];
         
         foreach ($this->messages as $msg) {
             foreach ($msg->getComposed() as $i) {

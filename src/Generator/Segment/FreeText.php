@@ -169,8 +169,6 @@ class FreeText extends Segment
             $aComposed[] = $this->sFreeTextFormatCode;
         }
 
-        // dd($aComposed);
-
         $this->setComposed($aComposed);
 
         return $this;
