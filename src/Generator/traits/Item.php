@@ -197,8 +197,7 @@ trait Item
     public function addInformation(
         string $code,
         string $information,
-    )
-    {
+    ) {
         $property = $this->additionalText[] = [
 
         ];
@@ -215,7 +214,7 @@ trait Item
         ];
 
         $key = rand(0, 100000);
-        
+
         while (property_exists($this, $key)) {
             $key = rand(0, 100000);
         }
@@ -228,26 +227,28 @@ trait Item
 
     public function addGir(
         int $index,
-        string $code,
-        string $locationCode,
-        string $stockCategory,
-    )
-    {
+        string $lloLocationCode,
+        string $lsqFundCode,
+        string $lfnPurchaseFundCode,
+        string $lcvDecimalPrice,
+    ) {
+        $index = \str_pad($index, 3, '0', STR_PAD_LEFT);
+
         $gir = [
             'GIR',
             $index,
             [
-                $code,
-                $locationCode,
-                $stockCategory,
+                $lloLocationCode,
+                'LLO',
+                $lsqFundCode,
                 'LSQ',
             ],
             [
-                'STOCK_AV',
+                $lfnPurchaseFundCode,
                 'LFN',
             ],
             [
-                '10.21',
+                $lcvDecimalPrice,
                 'LCV',
             ],
         ];
@@ -450,8 +451,7 @@ trait Item
     public function setQli($orderPosition)
     {
         $this->qli = $this->addRFFSegment('QLI', $orderPosition);
-
-        $this->addKeyToCompose('qli');
+        
         return $this;
     }
 
