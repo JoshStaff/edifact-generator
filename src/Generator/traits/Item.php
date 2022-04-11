@@ -179,7 +179,6 @@ trait Item
             [
                 (string) $qualifier,
                 (string) $quantity,
-                $unit,
             ],
         ];
 
@@ -240,6 +239,8 @@ trait Item
             [
                 $lloLocationCode,
                 'LLO',
+            ],
+            [
                 $lsqFundCode,
                 'LSQ',
             ],

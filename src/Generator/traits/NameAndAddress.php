@@ -178,19 +178,6 @@ trait NameAndAddress
                 '',
                 $managingOrganisation,
             ],
-            '',
-            $name,
-            str_split($street, 35),
-            str_split($city, 35),
-            [
-                '',
-            ],
-            [
-                self::maxChars($zipCode, 9),
-            ],
-            [
-                self::maxChars($countryCode, 2),
-            ],
         ];
     }
 
