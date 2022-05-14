@@ -205,7 +205,10 @@ trait Item
             'IMD',
             [
                 'L',
-                $code,
+            ],
+            $code,
+            [
+                '',
                 '',
                 '',
                 $information,
@@ -227,32 +230,40 @@ trait Item
     public function addGir(
         int $index,
         string $lloLocationCode,
-        string $lsqFundCode,
         string $lfnPurchaseFundCode,
         string $lcvDecimalPrice,
+        ?string $lsqFundCode = '',
     ) {
         $index = \str_pad($index, 3, '0', STR_PAD_LEFT);
 
-        $gir = [
+        $llo = [
+            $lloLocationCode,
+            'LLO',
+        ];
+
+        $lsq = [
+            $lsqFundCode,
+            'LSQ',
+        ];
+
+        $lfn = [
+            $lfnPurchaseFundCode,
+            'LFN',
+        ];
+
+        $lcv = [
+            $lcvDecimalPrice,
+            'LCV',
+        ];
+
+        $gir = array_filter([
             'GIR',
             $index,
-            [
-                $lloLocationCode,
-                'LLO',
-            ],
-            [
-                $lsqFundCode,
-                'LSQ',
-            ],
-            [
-                $lfnPurchaseFundCode,
-                'LFN',
-            ],
-            [
-                $lcvDecimalPrice,
-                'LCV',
-            ],
-        ];
+            $llo,
+            $lsq,
+            $lfn,
+            $lcv,
+        ]);
 
         $key = rand(0, 100000);
 
@@ -452,7 +463,7 @@ trait Item
     public function setQli($orderPosition)
     {
         $this->qli = $this->addRFFSegment('QLI', $orderPosition);
-        
+
         return $this;
     }
 
