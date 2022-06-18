@@ -60,6 +60,8 @@ class Orders extends Message
     /** @var array */
     protected $objectDescription1;
 
+    protected $customIdentifier;
+
     /** @var array */
     protected $objectDescription2;
 
@@ -100,6 +102,7 @@ class Orders extends Message
         'objectNumber',
         'objectDescription1',
         'objectDescription2',
+        'customIdentifier',
         'vatNumber',
         'currency',
         'manufacturerAddress',
@@ -478,6 +481,13 @@ class Orders extends Message
     public function setObjectDescription1($objectDescription1)
     {
         $this->objectDescription1 = $this->addRFFSegment('AFO', $objectDescription1);
+        return $this;
+    }
+
+    public function setCustomIdentifier($customOrderIdentifier)
+    {
+        $this->customIdentifier = $this->addRFFSegment('ON', $customOrderIdentifier);
+
         return $this;
     }
 
